@@ -16,3 +16,13 @@ module "network" {
 
   depends_on = [ azurerm_resource_group.rg_terra ]
 }
+
+
+module "vm" {
+  source              = "./modules/vm"
+  location            = var.location
+  resource_group_name = var.rg_name
+  vm_name             = "terra-vm"
+  vm_size             = "Standard_B1s"
+  depends_on = [ output.ssh_public_key]
+}
