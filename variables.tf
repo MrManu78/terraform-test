@@ -3,6 +3,6 @@ variable "rg_name" {
   type = string
 }
 variable "location" {
-  default = "francecentral"
+  default = "France Central"
   type = string
 }
