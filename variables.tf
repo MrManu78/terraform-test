@@ -1,5 +1,5 @@
 variable "rg_name" {
-  default = "TerraGroup"
+  default = "TerraGroupTest2"
   type = string
 }
 variable "location" {
