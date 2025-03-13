@@ -21,3 +21,33 @@ resource "azurerm_subnet" "subnet_private" {
   virtual_network_name = azurerm_virtual_network.vnet_terra.name
   address_prefixes     = var.private_subnet_prefix
 }
+
+resource "azurerm_network_security_group" "sg_vnet_terra" {
+  name                = var.sg_vnet_name
+  location            = var.location
+  resource_group_name = var.rg_name
+
+  security_rule {
+    name                       = "allow_ssh"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "allow_https"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
