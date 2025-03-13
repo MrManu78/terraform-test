@@ -3,6 +3,11 @@ variable "vnet_name" {
   type = string
 }
 
+variable "personal_public_ip" {
+  description = "propre ip publique"
+  type = string
+}
+
 variable "location" {
   description = "region azure"
   type = string
@@ -41,8 +46,4 @@ variable "private_subnet_prefix" {
 variable "sg_vnet_name" {
   description = "nom du security group lie au vnet (les rules sont definies par defaut dans le fichier 'resources')"
   type = string
-}
-variable "personal_public_ip" {
-    description = "propre ip publique"
-    type = list(string)
 }

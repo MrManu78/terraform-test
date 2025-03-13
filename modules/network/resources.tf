@@ -51,3 +51,25 @@ resource "azurerm_network_security_group" "sg_vnet_terra" {
     destination_address_prefix = "*"
   }
 }
+
+resource "azurerm_public_ip" "public_ip" {
+  name                = "public-ip"
+  location            = var.location
+  resource_group_name = var.rg_name
+  allocation_method   = "Static"
+  sku                 = "Basic" 
+}
+
+resource "azurerm_network_interface" "publique_interface" {
+  name                = "test_public_interface"
+  location            = var.location
+  resource_group_name = "my-resource-group"
+  
+  ip_configuration {
+    name                          = "public_access"
+    subnet_id                     = azurerm_subnet.subnet_public.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.public_ip.id
+    
+  }
+}
