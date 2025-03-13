@@ -13,6 +13,7 @@ resource "azurerm_subnet" "subnet_public" {
     resource_group_name = var.rg_name
     address_prefixes = var.public_subnet_prefix
     virtual_network_name = azurerm_virtual_network.vnet_terra.name
+    
   
 }
 resource "azurerm_subnet" "subnet_private" {
@@ -63,7 +64,7 @@ resource "azurerm_public_ip" "public_ip" {
 resource "azurerm_network_interface" "publique_interface" {
   name                = "test_public_interface"
   location            = var.location
-  resource_group_name = "my-resource-group"
+  resource_group_name = var.rg_name
   
   ip_configuration {
     name                          = "public_access"
@@ -72,4 +73,9 @@ resource "azurerm_network_interface" "publique_interface" {
     public_ip_address_id = azurerm_public_ip.public_ip.id
     
   }
+}
+
+resource "azurerm_subnet_network_security_group_association" "sg1"{
+  subnet_id = azurerm_subnet.subnet_public.id
+  network_security_group_id = azurerm_network_security_group.sg_vnet_terra.id
 }

@@ -3,36 +3,29 @@ resource "tls_private_key" "ssh_key" {
   rsa_bits  = 4096
 }
 
-resource "azurerm_virtual_machine" "vm" {
+resource "azurerm_linux_virtual_machine" "vm" {
   name                  = var.vm_name
   location              = var.location
   resource_group_name   = var.resource_group_name
-  network_interface_ids = [azurerm_network_interface.publique_interface.id]
-  vm_size               = var.vm_size
-
-  storage_os_disk {
-    name              = "terra-disk"
-    create_option     = "FromImage"
+  network_interface_ids = var.vm_network_interface
+  size               = var.vm_size
+  admin_username      = "adminuser"
+  
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
   }
 
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "20.04-LTS"
+  source_image_reference {
+    publisher = "canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts"
     version   = "latest"
   }
 
-  os_profile {
-    computer_name  = var.vm_name
-    admin_username = "adminuser"
-    custom_data    = <<-EOT
-                      #!/bin/bash
-                      mkdir -p /home/adminuser/.ssh
-                      echo "${tls_private_key.ssh_key.public_key}" > /home/adminuser/.ssh/authorized_keys
-                      chown -R adminuser:adminuser /home/adminuser/.ssh
-                      chmod 700 /home/adminuser/.ssh
-                      chmod 600 /home/adminuser/.ssh/authorized_keys
-                    EOT
+   admin_ssh_key {
+    username   = "adminuser"
+    public_key = tls_private_key.ssh_key.public_key_openssh
   }
 
   tags = {
