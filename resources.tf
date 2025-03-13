@@ -19,10 +19,10 @@ module "network" {
 
 
 module "vm" {
-  source              = "./modules/vm"
-  location            = var.location
+  source = "./modules/vm"
+  location = var.location
   resource_group_name = var.rg_name
-  vm_name             = "terra-vm"
-  vm_size             = "Standard_B1s"
+  vm_name = "terra-vm"
+  vm_size = "Standard_B1s"
   vm_network_interface =[module.network.interface_public]
 }

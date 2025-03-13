@@ -1,6 +1,6 @@
 resource "azurerm_virtual_network" "vnet_terra" {
-  name                = var.vnet_name
-  location            = var.location
+  name = var.vnet_name
+  location  = var.location
   resource_group_name = var.rg_name
   address_space = var.address_range
   tags = {
@@ -17,15 +17,15 @@ resource "azurerm_subnet" "subnet_public" {
   
 }
 resource "azurerm_subnet" "subnet_private" {
-  name                 = var.private_subnet_name
+  name = var.private_subnet_name
   resource_group_name  = var.rg_name
   virtual_network_name = azurerm_virtual_network.vnet_terra.name
-  address_prefixes     = var.private_subnet_prefix
+  address_prefixes = var.private_subnet_prefix
 }
 
 resource "azurerm_network_security_group" "sg_vnet_terra" {
-  name                = var.sg_vnet_name
-  location            = var.location
+  name = var.sg_vnet_name
+  location = var.location
   resource_group_name = var.rg_name
 
   security_rule {
@@ -54,21 +54,21 @@ resource "azurerm_network_security_group" "sg_vnet_terra" {
 }
 
 resource "azurerm_public_ip" "public_ip" {
-  name                = "public-ip"
-  location            = var.location
+  name  = "public-ip"
+  location  = var.location
   resource_group_name = var.rg_name
   allocation_method   = "Static"
-  sku                 = "Basic" 
+  sku  = "Basic" 
 }
 
 resource "azurerm_network_interface" "publique_interface" {
-  name                = "test_public_interface"
-  location            = var.location
+  name = "test_public_interface"
+  location  = var.location
   resource_group_name = var.rg_name
   
   ip_configuration {
-    name                          = "public_access"
-    subnet_id                     = azurerm_subnet.subnet_public.id
+    name= "public_access"
+    subnet_id = azurerm_subnet.subnet_public.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id = azurerm_public_ip.public_ip.id
     
